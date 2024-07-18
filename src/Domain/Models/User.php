@@ -30,7 +30,6 @@ class User
                 ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
                 ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()));
         } catch (InvalidArgumentException $e) {
-            var_dump($e->getMessage());
             return $e->getMessage();
         }
     }

@@ -43,8 +43,6 @@ class UserRepository extends Repository
 
         $user->setId($this->db->lastInsertId());
 
-        var_dump($user);
-
         return $user;
     }
 }
