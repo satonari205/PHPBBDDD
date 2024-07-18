@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Domain\Models\User;
 use PDO;
 
 class UserRepository extends Repository

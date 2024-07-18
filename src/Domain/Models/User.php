@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Domain\Models;
 
-use App\ValueObjects\UserName;
-use App\ValueObjects\Email;
-use App\ValueObjects\Password;
-use InvalidArgumentException;
+use App\Domain\ValueObjects\User\UserName;
+use App\Domain\ValueObjects\User\Email;
+use App\Domain\ValueObjects\User\Password;
+use App\Exceptions\InvalidArgumentException;
 
 class User
 {
@@ -24,7 +24,7 @@ class User
         int $updated_at = null,
     ) {
         try {
-            var_dump($name, $email);
+            var_dump($name);
             $this->setName(new UserName($name))
                 ->setEmail(new Email($email))
                 ->setPassword(new Password($password))

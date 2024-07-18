@@ -1,7 +1,8 @@
 <?php
 
-namespace App\ValueObjects;
+namespace App\Domain\ValueObjects\User;
 
+use App\Domain\ValueObjects\ValueObjectBase;
 use App\Exceptions\InvalidArgumentException;
 
 class Password extends ValueObjectBase
@@ -18,7 +19,7 @@ class Password extends ValueObjectBase
     private function validate(string $value)
     {
         // 最低文字数のチェック
-        if (strlen($value) <= self::MIN_LENGTH) {
+        if (strlen($value) < self::MIN_LENGTH) {
             throw new InvalidArgumentException('Password must be at least ' . self::MIN_LENGTH . ' characters long.');
         }
         // 最大文字数のチェック

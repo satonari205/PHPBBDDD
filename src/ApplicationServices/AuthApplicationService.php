@@ -3,7 +3,7 @@
 namespace App\ApplicationServices;
 
 use App\Domain\DomainServices\UserDomainService;
-use App\Models\User;
+use App\Domain\Models\User;
 use App\Repositories\UserRepository;
 use Firebase\JWT\JWT;
 
@@ -12,10 +12,10 @@ class AuthApplicationService
 {
     private $jwtKey;
 
-    // public function __construct()
-    // {
-    //     $this->jwtKey = $_ENV['JWT_SECRET_KEY'];
-    // }
+    public function __construct()
+    {
+        $this->jwtKey = $_ENV['JWT_SECRET_KEY'];
+    }
 
     public function generateToken($user)
     {

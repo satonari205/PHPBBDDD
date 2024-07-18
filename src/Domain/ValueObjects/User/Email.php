@@ -1,7 +1,8 @@
 <?php
 
-namespace App\ValueObjects;
+namespace App\Domain\ValueObjects\User;
 
+use App\Domain\ValueObjects\ValueObjectBase;
 use App\Exceptions\InvalidArgumentException;
 
 class Email extends ValueObjectBase

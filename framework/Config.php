@@ -7,10 +7,11 @@ class Config
     public static function getEnv(): array
     {
         return [
-            "user"     => $_ENV["DB_USER"],
-            "password" => $_ENV["DB_PASSWORD"],
+            "user"     => $_ENV["MYSQL_USER"],
+            "password" => $_ENV["MYSQL_PASSWORD"],
             "host"     => $_ENV["HOST"],
-            "dbname"   => $_ENV["DB_NAME"]
+            "port"     => $_ENV["PORT"],
+            "dbname"   => $_ENV["MYSQL_DATABASE"]
         ];
     }
 }
