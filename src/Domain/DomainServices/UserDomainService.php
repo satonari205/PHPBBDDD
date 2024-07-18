@@ -10,6 +10,6 @@ class UserDomainService
     /* ユーザーがすでに存在しているか確認してBoolを返す */
     public function exists(User $user): bool
     {
-        return (new UserRepository)->findByEmail($user->getEmail()) === null;
+        return (new UserRepository)->findByEmail($user->getEmail()) !== null;
     }
 }

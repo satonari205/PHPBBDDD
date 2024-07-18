@@ -7,17 +7,9 @@ use PDO;
 
 class UserRepository extends Repository
 {
-    private $pdo;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->pdo = new PDO('mysql:host=localhost;dbname=your_database', 'username', 'password');
-    }
-
     public function findById(int $id): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE id = :id');
+        $stmt = $this->db->prepare('SELECT * FROM Users WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -26,7 +18,7 @@ class UserRepository extends Repository
 
     public function findByEmail(string $email): ?array
     {
-        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = :email');
+        $stmt = $this->db->prepare('SELECT * FROM Users WHERE email = :email');
         $stmt->execute(['email' => $email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -35,8 +27,8 @@ class UserRepository extends Repository
 
     public function create(User $user)
     {
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO users (name, email, password, created_at, updated_at)'
+        $stmt = $this->db->prepare(
+            'INSERT INTO Users (name, email, password, created_at, updated_at)'
             . ' ' .
             'VALUES (:name, :email, :password, :created_at, :updated_at)'
         );
@@ -49,8 +41,10 @@ class UserRepository extends Repository
             ':updated_at' => $user->getUpdatedAt()
         ]);
 
-        $user->setId($this->pdo->lastInsertId());
+        $user->setId($this->db->lastInsertId());
 
-        return $user->getAllValue();
+        var_dump($user);
+
+        return $user;
     }
 }

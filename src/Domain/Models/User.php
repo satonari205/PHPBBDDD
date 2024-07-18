@@ -13,27 +13,36 @@ class User
     private UserName $name;
     private Email $email;
     private Password $password;
-    private int $created_at;
-    private int $updated_at;
+    private string $created_at;
+    private string $updated_at;
 
     public function __construct(
         string $name,
         string $email,
         string $password,
-        int $created_at = null,
-        int $updated_at = null,
+        string $created_at = null,
+        string $updated_at = null,
     ) {
         try {
-            var_dump($name);
             $this->setName(new UserName($name))
                 ->setEmail(new Email($email))
                 ->setPassword(new Password($password))
-                ->setCreatedAt($created_at ?? time())
-                ->setUpdatedAt($updated_at ?? time());
+                ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
+                ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()));
         } catch (InvalidArgumentException $e) {
             var_dump($e->getMessage());
             return $e->getMessage();
         }
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function setName(UserName $name): self
@@ -69,24 +78,24 @@ class User
         return $this->password->getHashedPassword();
     }
 
-    private function setCreatedAt(int $timestamp): self
+    private function setCreatedAt(string $timestamp): self
     {
         $this->created_at = $timestamp;
         return $this;
     }
 
-    public function getCreatedAt(): int
+    public function getCreatedAt(): string
     {
         return $this->created_at;
     }
 
-    private function setUpdatedAt(int $timestamp): self
+    private function setUpdatedAt(string $timestamp): self
     {
         $this->updated_at = $timestamp;
         return $this;
     }
 
-    public function getUpdatedAt(): int
+    public function getUpdatedAt(): string
     {
         return $this->updated_at;
     }
