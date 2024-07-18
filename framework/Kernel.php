@@ -27,11 +27,14 @@ class Kernel
         switch ($status) {
             case Dispatcher::NOT_FOUND:
                 return new Response('404 Not Found', 404);
+                break;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 return new Response('405 Method Not Allowed', 405);
+                break;
             case Dispatcher::FOUND:
                 $response = call_user_func_array([new $controller, $method], [$request, ...$vars]);
                 return $response;
+                break;
             default:
                 return new Response('500 Internal Server Error', 500);
         }
