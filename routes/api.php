@@ -8,9 +8,9 @@ return [
     ["POST", "/api/register", [AuthController::class, "register"]],
     ["POST", "/api/login", [AuthController::class, "login"]],
     ["POST", "/api/logout", [AuthController::class, "logout"]],
+    ["GET", "/api/user", [AuthController::class, "user"]],
 
     // User
-    ["GET", "/api/user", [UsersController::class, "user"]],
     // ["GET", "/api/users", [UserController::class, "index"]],
     // ["PUT", "/api/user/{id}", [UserController::class, "update"]],
     // ["DELETE", "/api/user/{id}", [UserController::class, "delete"]],

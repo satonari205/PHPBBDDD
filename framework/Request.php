@@ -28,8 +28,23 @@ class Request
         return $this->server["REQUEST_METHOD"];
     }
 
+    public function getParams(): array
+    {
+        return $this->getParams;
+    }
+
     public function getPostParams(): array
     {
         return $this->postParams;
+    }
+
+    public function getCookie(string $name): ?string
+    {
+        return $this->cookie[$name] ?? null;
+    }
+
+    public function getCookies(): array
+    {
+        return $this->cookie;
     }
 }

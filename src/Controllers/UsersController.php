@@ -2,13 +2,11 @@
 
 namespace App\Controllers;
 
+use App\ApplicationServices\UserApplicationService;
+use Framework\Request;
+
 class UsersController
 {
-    public function user()
-    {
-        //
-    }
-
     public function index()
     {
         //

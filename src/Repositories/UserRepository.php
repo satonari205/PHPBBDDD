@@ -7,22 +7,22 @@ use PDO;
 
 class UserRepository extends Repository
 {
-    public function findById(int $id): ?array
+    public function findById(int $id): ?User
     {
         $stmt = $this->db->prepare('SELECT * FROM Users WHERE id = :id');
         $stmt->execute(['id' => $id]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $result ?: null;
+        return $user ? $this->getUserModel($user) : null;
     }
 
-    public function findByEmail(string $email): ?array
+    public function findByEmail(string $email): ?User
     {
         $stmt = $this->db->prepare('SELECT * FROM Users WHERE email = :email');
         $stmt->execute(['email' => $email]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $result ?: null;
+        return $user ? $this->getUserModel($user) : null;
     }
 
     public function create(User $user)
@@ -36,13 +36,21 @@ class UserRepository extends Repository
         $stmt->execute([
             ':name' => $user->getName(),
             ':email' => $user->getEmail(),
-            ':password' => $user->getPassword(),
+            ':password' => $user->getHashedPassword(),
             ':created_at' => $user->getCreatedAt(),
             ':updated_at' => $user->getUpdatedAt()
         ]);
+    }
 
-        $user->setId($this->db->lastInsertId());
-
-        return $user;
+    private function getUserModel(array $user): User
+    {
+        return new User(
+            $user['id'],
+            $user['name'],
+            $user['email'],
+            $user['password'],
+            $user['created_at'],
+            $user['updated_at'],
+        );
     }
 }

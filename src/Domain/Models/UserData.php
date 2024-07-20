@@ -2,44 +2,38 @@
 
 namespace App\Domain\Models;
 
-use App\Domain\ValueObjects\User\UserName;
-use App\Domain\ValueObjects\User\Email;
-use App\Domain\ValueObjects\User\Password;
 use App\Exceptions\InvalidArgumentException;
 
 class User
 {
-    private ?int $id = null; // 識別子
-    private UserName $name;
-    private Email $email;
-    private Password $password;
+    private int $id; // 識別子
+    private string $name;
+    private string $email;
+    private string $password;
     private string $created_at;
     private string $updated_at;
 
     public function __construct(
-        string $id,
         string $name,
         string $email,
         string $password,
-        string $created_at = null,
-        string $updated_at = null,
+        string $created_at,
+        string $updated_at,
     ) {
         try {
-            $this->setId($id)
-                ->setName(new UserName($name))
-                ->setEmail(new Email($email))
-                ->setPassword(new Password($password))
-                ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
-                ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()));
+            $this->setName($name)
+                ->setEmail($email)
+                ->setPassword($password)
+                ->setCreatedAt($created_at)
+                ->setUpdatedAt($updated_at);
         } catch (InvalidArgumentException $e) {
             return $e->getMessage();
         }
     }
 
-    public function setId(int $id): self
+    public function setId(int $id)
     {
         $this->id = $id;
-        return $this;
     }
 
     public function getId(): string
@@ -47,7 +41,7 @@ class User
         return $this->id;
     }
 
-    public function setName(UserName $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -55,10 +49,10 @@ class User
 
     public function getName(): string
     {
-        return $this->name->getValue();
+        return $this->name;
     }
 
-    public function setEmail(Email $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
@@ -66,23 +60,18 @@ class User
 
     public function getEmail(): string
     {
-        return $this->email->getValue();
+        return $this->email;
     }
 
-    public function setPassword(Password $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
         return $this;
     }
 
-    public function getPassword(): string
-    {
-        return $this->password->getValue();
-    }
-
     public function getHashedPassword(): string
     {
-        return password_hash($this->password->getValue(), PASSWORD_DEFAULT);
+        return password_hash($this->password, PASSWORD_DEFAULT);
     }
 
     private function setCreatedAt(string $timestamp): self
