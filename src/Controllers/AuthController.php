@@ -2,32 +2,34 @@
 
 namespace App\Controllers;
 
-use App\ApplicationServices\AuthApplicationService;
+use App\ApplicationServices\UserApplicationService;
+use App\Services\AuthService;
 use Framework\Config;
 use Framework\Request;
 use Framework\Response;
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 
 class AuthController
 {
-    private $jwtKey;
+    private AuthService $authService;
+    private UserApplicationService $appService;
 
     public function __construct()
     {
         $config = Config::getEnv();
-        $this->jwtKey = $config['jwt_key'];
+        $this->authService = new AuthService($config['jwt_key'], $config['domain']);
+        $this->appService = new UserApplicationService;
     }
 
     public function register(Request $request): Response
     {
         $params = $request->getPostParams();
-        $res = (new AuthApplicationService)->createUser(
+        $res = $this->appService->createUser(
             $params['name'],
             $params['email'],
             $params['password'],
         );
+
         return new Response($res);
     }
 
@@ -37,54 +39,51 @@ class AuthController
 
         $params = $request->getPostParams();
 
-        $result = (new AuthApplicationService)->authenticate($params['email'], $params['password']);
+        $result = $this->appService->login($params['email'], $params['password']);
 
         if($result['success'] === false){
-            return new Response($result['message']);
+            return new Response($result['message'], 401);
         }
 
         // セッションに認証用のトークン、CSRFトークンをそれぞれセット
-        $jwt = $this->generateToken($result['user_id']);
-        $csrfToken = bin2hex(random_bytes(32));
-        $_SESSION['jwt'] = $jwt;
+        $jwt = $this->authService->generateJWT($result['userId']);
+        $csrfToken = $this->authService->generateCsrfToken();
+
         $_SESSION['csrf_token'] = $csrfToken;
 
-        // Cookieにそれぞれのトークンをセット
-        $res = new Response("Login successful!");
+        $res = new Response(['message' => 'Login successful.']);
         $res->setTokenInCookie('jwt', $jwt);
         $res->setTokenInCookie('csrf_token', $csrfToken);
 
         return $res;
     }
 
-    public function user(Request $request)
+    public function user(Request $request): Response
     {
-        $jwt = $request->getCookie('jwt');
-        $csrfToken = $request->getCookie('csrf_token');
+        $authInfo = $this->authService->authenticate($request);
 
-        $decoded = JWT::decode($jwt, new Key($this->jwtKey, 'HS256'));
-        // $user = (new AuthApplicationService)->getUser();
-        var_dump($decoded, $csrfToken);
+        if (!$authInfo['success']) {
+            return new Response(['message' => $authInfo['message']], 401);
+        }
+
+        $user = $this->appService->getUser($authInfo['user_id']);
+
+        $res = new Response($user);
+        $res->setTokenInCookie('csrf_token', $authInfo['csrf_token']);
+
+        return $res;
     }
 
     public function logout()
     {
         session_start();
-    }
+        session_destroy();
 
-    private function generateToken(string $userId)
-    {
-        $payload = [
-            'iss' => $this->jwtKey,
-            'user_id' => $userId,
-            'iat' => time(),
-            'exp' => time() + 3600
-        ];
-        return JWT::encode($payload, $this->jwtKey, 'HS256');
-    }
+        // クッキーの有効期限を過去の日付に設定して削除
+        $res = new Response(["message" => "Logout successful."]);
+        $res->setTokenInCookie('jwt', '', time() - 1);
+        $res->setTokenInCookie('csrf_token', '', time() - 1);
 
-    private function verifyToken()
-    {
-        //
+        return $res;
     }
 }

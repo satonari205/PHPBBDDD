@@ -12,13 +12,10 @@ require_once dirname(__DIR__) . "/vendor/autoload.php";
 $dotenv = Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
-// request received
 $request = Request::createFromGlobals();
 
 $kernel = new Kernel();
 
-// perform some logic
 $response = $kernel->handle($request);
 
-// send response (string of content)
 $response->send();

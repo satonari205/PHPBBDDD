@@ -13,7 +13,7 @@ class UserRepository extends Repository
         $stmt->execute(['id' => $id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $user ? $this->getUserModel($user) : null;
+        return $this->getUserModel($user);
     }
 
     public function findByEmail(string $email): ?User
@@ -22,10 +22,10 @@ class UserRepository extends Repository
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $user ? $this->getUserModel($user) : null;
+        return $this->getUserModel($user);
     }
 
-    public function create(User $user)
+    public function create(User $user): ?User
     {
         $stmt = $this->db->prepare(
             'INSERT INTO Users (name, email, password, created_at, updated_at)'
@@ -40,17 +40,27 @@ class UserRepository extends Repository
             ':created_at' => $user->getCreatedAt(),
             ':updated_at' => $user->getUpdatedAt()
         ]);
+
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $this->getUserModel($user, $this->db->lastInsertId());
     }
 
-    private function getUserModel(array $user): User
+    private function getUserModel(array|bool $user, ?int $id = null): User
     {
+        if($user === false){
+            return null;
+        }
+
+        $userId = is_null($id) ? $user['id'] : $id;
+
         return new User(
-            $user['id'],
             $user['name'],
             $user['email'],
             $user['password'],
             $user['created_at'],
             $user['updated_at'],
+            $userId
         );
     }
 }

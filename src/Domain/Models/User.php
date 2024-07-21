@@ -17,26 +17,26 @@ class User
     private string $updated_at;
 
     public function __construct(
-        string $id,
         string $name,
         string $email,
         string $password,
         string $created_at = null,
         string $updated_at = null,
+        ?int $id = null,
     ) {
         try {
-            $this->setId($id)
-                ->setName(new UserName($name))
+            $this->setName(new UserName($name))
                 ->setEmail(new Email($email))
                 ->setPassword(new Password($password))
                 ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
-                ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()));
+                ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()))
+                ->setId((int)$id);
         } catch (InvalidArgumentException $e) {
             return $e->getMessage();
         }
     }
 
-    public function setId(int $id): self
+    public function setId(?int $id): self
     {
         $this->id = $id;
         return $this;
