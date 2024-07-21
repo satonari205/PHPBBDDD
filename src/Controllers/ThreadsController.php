@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\ApplicationServices\ThreadApplicationService;
 use Framework\Request;
+use Framework\Response;
 
 class ThreadsController
 {
@@ -18,7 +20,11 @@ class ThreadsController
 
     public function store(Request $request)
     {
-        //
+        $params = $request->getpostParams();
+
+        $res = (new ThreadApplicationService)->createThread($params['userId'], $params['title'], $params['body']);
+
+        return new Response($res);
     }
 
     public function update()

@@ -13,7 +13,7 @@ class ThreadApplicationService
 {
     use ResponseTrait;
 
-    public function createThread($userId, $title, $body)
+    public function createThread(int $userId, string $title, string $body)
     {
         try {
             $thread = new Thread($userId, $title, $body);
