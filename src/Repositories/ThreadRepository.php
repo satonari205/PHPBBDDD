@@ -20,7 +20,7 @@ class ThreadRepository extends Repository
 
     public function all(
         int $page = 1,
-        int $pageSize = 30,
+        int $pageSize = 20,
         string $sort = 'created_at',
         string $order = 'desc',
         ?string $search = null
@@ -47,7 +47,14 @@ class ThreadRepository extends Repository
             $order . " LIMIT :limit OFFSET :offset" // ページネーション
         );
 
-        $stmt->execute($params);
+        // プレースホルダーに型を指定してバインド
+        if (isset($params[':search'])) {
+            $stmt->bindValue(':search', $params[':search'], PDO::PARAM_STR);
+        }
+        $stmt->bindValue(':limit', $params[':limit'], PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $params[':offset'], PDO::PARAM_INT);
+
+        $stmt->execute();
 
         $threadData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

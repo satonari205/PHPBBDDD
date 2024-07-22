@@ -30,10 +30,10 @@ class ThreadApplicationService
     {
         $threads = (new ThreadRepository)->all(
             $params['page'],
-            $params['page_size'],
-            $params['sort'],
-            $params['order'],
-            $params['search']
+            $params['page_size'] ?? 20,
+            $params['sort'] ?? 'created_at',
+            $params['order'] ?? 'desc',
+            $params['search'] ?? null
         );
 
         // Nullの時は空配列を返す
@@ -41,16 +41,11 @@ class ThreadApplicationService
             return [];
         }
 
-        // ユーザーを取得して結合
-        $res = (array) array_map(function ($thread) {
-            $thread['user'] = (new UserRepository)->findById($thread->getUserId());
-            return $thread;
-        }, $threads);
-
-        // Modelを全て配列にして返す
+        // ユーザーを取得して結合して返す
         return (array) array_map(function ($thread) {
-            return $this->getThreadArray($thread, $thread['user']);
-        }, $res);
+            $user = (new UserRepository)->findById($thread->getUserId());
+            return $this->getThreadArray($thread, $user);
+        }, $threads);
     }
 
     public function createThread(int $userId, string $title, string $body)
