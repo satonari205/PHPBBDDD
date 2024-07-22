@@ -36,19 +36,21 @@ class Thread
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
+        return $this;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    public function setUserId($userId)
+    public function setUserId($userId): self
     {
         $this->userId = $userId;
+        return $this;
     }
 
     public function getTitle()
@@ -62,7 +64,7 @@ class Thread
         return $this;
     }
 
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body->getValue();
     }
@@ -78,9 +80,10 @@ class Thread
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
     }
 
     public function getUpdatedAt()
@@ -88,8 +91,9 @@ class Thread
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
     }
 }

@@ -7,6 +7,14 @@ use App\Domain\Models\User;
 
 trait ResponseTrait
 {
+    public function successResponse(int $status, string $msg)
+    {
+        return [
+            'status' => $status,
+            'message' => $msg,
+        ];
+    }
+
     public function failResponse(int $status, string $msg)
     {
         return [

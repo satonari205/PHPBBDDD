@@ -4,7 +4,7 @@ namespace App\ApplicationServices;
 
 use App\Domain\Models\Thread;
 use App\Repositories\UserRepository;
-use App\Repostories\ThreadRepository;
+use App\Repositories\ThreadRepository;
 use App\Traits\ResponseTrait;
 use InvalidArgumentException;
 
@@ -57,14 +57,17 @@ class ThreadApplicationService
     {
         try {
             $thread = new Thread($userId, $title, $body);
+
+            if((new ThreadRepository)->save($thread) === null){
+                return $this->failResponse(400, "store failed.");
+            }
+
+            $user = (new UserRepository)->findById($userId);
+
+            return $this->getThreadArray($thread, $user);
         } catch (InvalidArgumentException $e) {
             return $this->failResponse(400, $e->getMessage());
         }
-
-        $thread = (new ThreadRepository)->save($thread);
-        $user = (new UserRepository)->findByEmail($thread->getId());
-
-        return $this->getThreadArray($thread, $user);
     }
 
     public function updateThread(int $id, string $title, string $body): array
@@ -81,8 +84,14 @@ class ThreadApplicationService
         return $this->getThreadArray($newThread, $user);
     }
 
-    public function deleteThread()
+    public function deleteThread(int $id): array
     {
-        //
+        $res = (new ThreadRepository)->delete($id);
+
+        if($res === false){
+            return $this->failResponse(400, "fail to delete.");
+        }
+
+        return $this->successResponse(200, "delete successful!");
     }
 }

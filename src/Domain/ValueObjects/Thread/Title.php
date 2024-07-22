@@ -23,7 +23,7 @@ class Title extends ValueObjectBase
             throw new InvalidArgumentException('The title cannot be null.');
         }
         // 100文字以内
-        if (strlen($value) <= self::MAX_LENGTH) {
+        if (strlen($value) > self::MAX_LENGTH) {
             throw new InvalidArgumentException('The title must be within 100 characters.');
         }
     }

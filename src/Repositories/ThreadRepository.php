@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repostories;
+namespace App\Repositories;
 
 use App\Domain\Models\Thread;
 use App\Repositories\Repository;
@@ -54,7 +54,7 @@ class ThreadRepository extends Repository
         return $this->getThreadModels($threadData);
     }
 
-    public function save(Thread $thread): ?Thread
+    public function save(Thread $thread): ?int
     {
         $stmt = $this->db->prepare(
             'INSERT INTO Threads (user_id, title, body, created_at, updated_at)'
@@ -62,17 +62,15 @@ class ThreadRepository extends Repository
             'VALUES (:user_id, :title, :body, :created_at, :updated_at)'
         );
 
-        $stmt->execute([
-            ':user_id' => $thread->getId(),
+        $isSuccess = $stmt->execute([
+            ':user_id' => $thread->getUserId(),
             ':title' => $thread->getTitle(),
             ':body' => $thread->getBody(),
             ':created_at' => $thread->getCreatedAt(),
             ':updated_at' => $thread->getUpdatedAt()
         ]);
 
-        $threadData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        return $this->getThreadModel($threadData);
+        return $isSuccess ?: null;
     }
 
     public function update(Thread $thread): Thread
@@ -89,6 +87,14 @@ class ThreadRepository extends Repository
         ]);
 
         return $thread;
+    }
+
+    public function delete(int $id): bool
+    {
+        $stmt = $this->db->prepare('DELETE FROM Threads WHERE id = :id');
+        $isSuccess = $stmt->execute(['id' => $id]);
+
+        return $isSuccess;
     }
 
     private function getThreadModel(array|bool $threadData): ?Thread

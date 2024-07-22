@@ -17,20 +17,23 @@ class ThreadsController
 
         return new Response($res);
     }
-    public function show(int $id)
+
+    public function show(Request $request, int $id)
     {
         $res = (new ThreadApplicationService)->getThread($id);
 
         return new Response($res);
     }
+
     public function store(Request $request)
     {
-        $params = $request->getpostParams();
+        $params = $request->getPostParams();
 
         $res = (new ThreadApplicationService)->createThread($params['userId'], $params['title'], $params['body']);
 
         return new Response($res);
     }
+
     public function update(Request $request, int $id)
     {
         $params = $request->getPostParams();
@@ -39,8 +42,11 @@ class ThreadsController
 
         return new Response($res);
     }
-    public function delete()
+
+    public function destroy(Request $request, int $id)
     {
-        //
+        $res = (new ThreadApplicationService)->deleteThread($id);
+
+        return new Response($res);
     }
 }

@@ -35,7 +35,9 @@ class Request
 
     public function getPostParams(): array
     {
-        return $this->postParams;
+        // JSON形式のPOSTデータを取得する
+        $input = file_get_contents('php://input');
+        return json_decode($input, true);
     }
 
     public function getCookie(string $name): ?string
