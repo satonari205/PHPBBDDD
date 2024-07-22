@@ -24,8 +24,8 @@ class Thread
         int $id = null,
     ) {
         $this->setUserId($userId);
-        $this->setTitle(new Title($title));
-        $this->setBody(new Body($body));
+        $this->setTitle($title);
+        $this->setBody($body);
         $this->setCreatedAt($createdAt ?? date('Y-m-d H:i:s', time()));
         $this->setUpdatedAt($updatedAt ?? date('Y-m-d H:i:s', time()));
         $this->setId($id);
@@ -56,9 +56,10 @@ class Thread
         return $this->title->getValue();
     }
 
-    public function setTitle(Title $title)
+    public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = new Title($title);
+        return $this;
     }
 
     public function getBody()
@@ -66,9 +67,10 @@ class Thread
         return $this->body->getValue();
     }
 
-    public function setBody(Body $body)
+    public function setBody(string $body): self
     {
-        $this->body = $body;
+        $this->body = new Body($body);
+        return $this;
     }
 
     public function getCreatedAt()

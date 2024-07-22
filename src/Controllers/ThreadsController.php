@@ -6,18 +6,23 @@ use App\ApplicationServices\ThreadApplicationService;
 use Framework\Request;
 use Framework\Response;
 
+
 class ThreadsController
 {
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
+        $params = $request->getParams();
 
-    public function show()
+        $res = (new ThreadApplicationService)->getThreads($params);
+
+        return new Response($res);
+    }
+    public function show(int $id)
     {
-        //
-    }
+        $res = (new ThreadApplicationService)->getThread($id);
 
+        return new Response($res);
+    }
     public function store(Request $request)
     {
         $params = $request->getpostParams();
@@ -26,12 +31,14 @@ class ThreadsController
 
         return new Response($res);
     }
-
-    public function update()
+    public function update(Request $request, int $id)
     {
-        //
-    }
+        $params = $request->getPostParams();
 
+        $res = (new ThreadApplicationService)->updateThread($id, $params['title'], $params['body']);
+
+        return new Response($res);
+    }
     public function delete()
     {
         //
