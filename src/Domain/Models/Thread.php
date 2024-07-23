@@ -24,8 +24,8 @@ class Thread
         int $id = null,
     ) {
         $this->setUserId($userId);
-        $this->setTitle(new Title($title));
-        $this->setBody(new Body($body));
+        $this->setTitle($title);
+        $this->setBody($body);
         $this->setCreatedAt($createdAt ?? date('Y-m-d H:i:s', time()));
         $this->setUpdatedAt($updatedAt ?? date('Y-m-d H:i:s', time()));
         $this->setId($id);
@@ -36,19 +36,21 @@ class Thread
         return $this->id;
     }
 
-    public function setId($id)
+    public function setId($id): self
     {
         $this->id = $id;
+        return $this;
     }
 
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
-    public function setUserId($userId)
+    public function setUserId($userId): self
     {
         $this->userId = $userId;
+        return $this;
     }
 
     public function getTitle()
@@ -56,19 +58,21 @@ class Thread
         return $this->title->getValue();
     }
 
-    public function setTitle(Title $title)
+    public function setTitle(string $title): self
     {
-        $this->title = $title;
+        $this->title = new Title($title);
+        return $this;
     }
 
-    public function getBody()
+    public function getBody(): string
     {
         return $this->body->getValue();
     }
 
-    public function setBody(Body $body)
+    public function setBody(string $body): self
     {
-        $this->body = $body;
+        $this->body = new Body($body);
+        return $this;
     }
 
     public function getCreatedAt()
@@ -76,9 +80,10 @@ class Thread
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
     }
 
     public function getUpdatedAt()
@@ -86,8 +91,9 @@ class Thread
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+        return $this;
     }
 }

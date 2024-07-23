@@ -46,7 +46,7 @@ class UserRepository extends Repository
         return $this->getUserModel($user, $this->db->lastInsertId());
     }
 
-    private function getUserModel(array|bool $user, ?int $id = null): User
+    private function getUserModel(array|bool $user, ?int $id = null): ?User
     {
         if($user === false){
             return null;
