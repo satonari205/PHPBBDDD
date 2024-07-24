@@ -56,7 +56,7 @@ This PHPBBDDD project is created by its author to learn about DDD.
 - `created_at`: timestamp
 - `updated_at`: timestamp
 
-### Replies
+### Comments
 
 - `id`: int (primary key)
 - `user_id`: int (foreign key to Users table)
