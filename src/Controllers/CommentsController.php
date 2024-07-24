@@ -8,28 +8,42 @@ use Framework\Response;
 
 class CommentsController
 {
-    public function index(Request $request): Response
+    public function index(Request $request, int $thread_id): Response
     {
-        $params = $request->getParams();
+        $res = (new CommentApplicationService)->getComments($thread_id);
 
-        $res = (new CommentApplicationService)->getComments();
+        return new Response($res);
+    }
+    
+    public function show(Request $request, int $id): Response
+    {
+        $res = (new CommentApplicationService)->getComment($id);
 
-        return new Response();
+        return new Response($res);
     }
 
-    public function show($thread_id, $id)
+    public function store(Request $request): Response
     {
+        $params = $request->getPostParams();
+
+        $res = (new CommentApplicationService)->createComment($params);
+
+        return new Response($res);
     }
 
-    public function store($thread_id)
+    public function update(Request $request, int $thread_id, int $id): Response
     {
+        $params = $request->getPostParams();
+
+        $res = (new CommentApplicationService)->updateComment($params);
+
+        return new Response($res);
     }
 
-    public function update($thread_id, $id)
+    public function destroy(Request $request, int $id): Response
     {
-    }
+        $res = (new CommentApplicationService)->deleteComment($id);
 
-    public function destroy($thread_id, $id)
-    {
+        return new Response($res);
     }
 }

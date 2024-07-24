@@ -24,9 +24,9 @@ return [
     ["DELETE", "/api/threads/{id}", [ThreadsController::class, "destroy"]],
 
     // Comments
-    ["GET", "/api/thread/{thread_id}/comment/{id}", [CommentsController::class, "show"]],
-    ["GET", "/api/thread/{thread_id}/comments", [CommentsController::class, "index"]],
-    ["POST", "/api/thread/{thread_id}/comment", [CommentsController::class, "store"]],
-    ["PATCH", "/api/thread/{thread_id}/comment/{id}", [CommentsController::class, "update"]],
-    ["DELETE", "/api/thread/{thread_id}/comment/{id}", [CommentsController::class, "destroy"]],
+    ["GET", "/api/threads/{thread_id}/comments", [CommentsController::class, "index"]],
+    ["GET", "/api/comments/{id}",                [CommentsController::class, "show"]],
+    ["POST", "/api/comments",                    [CommentsController::class, "store"]],
+    ["PATCH", "/api/comments/{id}",              [CommentsController::class, "update"]],
+    ["DELETE", "/api/comments/{id}",             [CommentsController::class, "destroy"]],
 ];

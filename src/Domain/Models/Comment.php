@@ -18,17 +18,17 @@ class Comment
         int $userId,
         int $threadId,
         ?string $body,
-        bool $upvotes,
-        string $createdAt,
-        string $updatedAt
+        bool $upvotes = false,
+        string $createdAt = null,
+        string $updatedAt = null
     ) {
         $this->id = $id;
         $this->userId = $userId;
         $this->threadId = $threadId;
         $this->body = $body;
         $this->upvotes = $upvotes;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
+        $this->createdAt = $createdAt ?? date('Y-m-d H:i:s', time());
+        $this->updatedAt = $updatedAt ?? date('Y-m-d H:i:s', time());
     }
 
     public function getId(): int

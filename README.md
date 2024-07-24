@@ -25,11 +25,11 @@ This PHPBBDDD project is created by its author to learn about DDD.
 
 ### Comments
 
-- GET api/thread/{thread_id}/comment/{id}
-- GET api/thread/{thread_id}/comments
-- POST api/thread/{thread_id}/comment
-- PATCH api/thread/{thread_id}/comment/{id}
-- DELETE api/thread/{thread_id}/comment/{id}
+- GET api/threads/{thread_id}/comments/{id}
+- GET api/threads/{thread_id}/comments
+- POST api/threads/{thread_id}/comments
+- PATCH api/threads/{thread_id}/comments/{id}
+- DELETE api/threads/{thread_id}/comments/{id}
 
 ### Search
 

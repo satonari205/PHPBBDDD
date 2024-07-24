@@ -2,31 +2,51 @@
 
 namespace ApplicationServices;
 
+use App\Domain\Models\Comment;
+use App\Repositories\CommentRepository;
+use App\Repositories\UserRepository;
+use App\Traits\ResponseTrait;
 
 class CommentApplicationService
 {
-    public function createComment($commentData)
+    use ResponseTrait;
+
+    public function getComments(int $threadId): array
     {
-        // TODO: Implement createComment method
+        $comments = (new CommentRepository)->list($threadId);
+
+        return (array) array_map(function ($comment) {
+            $user = (new UserRepository)->findById($comment->getUserId());
+            $this->getCommentArray($comment, $user);
+        }, $comments);
     }
 
-    public function updateComment($commentId, $commentData)
+    public function getComment(int $id): array
     {
-        // TODO: Implement updateComment method
+        $comment = (new CommentRepository)->find($id);
+        $user = (new UserRepository)->findById($comment->getUserId());
+
+        return $this->getCommentArray($comment, $user);
     }
 
-    public function deleteComment($commentId)
+    public function createComment(array $commentData): array
     {
-        // TODO: Implement deleteComment method
+        $isSuccess = (new CommentRepository)->create($commentData);
+
+        if(!$isSuccess) return $this->failResponse(400, "Comment failed!");
+
+        return $this->successResponse(200, "Successfully commented!");
     }
 
-    public function getComment($commentId)
+    public function updateComment(array $commentData): array
     {
-        // TODO: Implement getComment method
+        return $this->failResponse(400, "Comment udpate failed!");
     }
 
-    public function getComments()
+    public function deleteComment($commentId): array
     {
-        //
+        return $this->failResponse(400, "Comment delete failed!");
     }
+
+
 }
