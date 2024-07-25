@@ -42,7 +42,7 @@ class User
         return $this;
     }
 
-    public function getId(): string
+    public function getId(): int
     {
         return $this->id;
     }

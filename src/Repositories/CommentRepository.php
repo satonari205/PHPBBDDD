@@ -24,7 +24,7 @@ class CommentRepository extends Repository
 
         if($comments === false) return null;
 
-        return (array) array_map(fn($comment) => $this->getCommentsModel($comment), $comments);
+        return $this->getCommentsModel($comments);
     }
 
     public function create(array $commentData): bool {
@@ -44,14 +44,23 @@ class CommentRepository extends Repository
         ]);
     }
 
-    public function update($id, $data)
+    public function update(array $data, int $id): bool
     {
-        //
+        $stmt = $this->db->prepare(
+            'UPDATE Comments SET body = :body, upvotes = :upvotes, updated_at = :updated_at WHERE id = :id'
+        );
+        return $stmt->execute([
+            'id' => $id,
+            'body' => $data['body'],
+            'upvotes' => $data['upvotes'],
+            'updated_at' => $data['updated_at'] ?? date('Y-m-d H:i:s', time()),
+        ]);
     }
 
-    public function delete($id)
+    public function delete(int $id): bool
     {
-        //
+        $stmt = $this->db->prepare('DELETE FROM Comments WHERE id = :id');
+        return $stmt->execute(['id' => $id]);
     }
 
     private function getCommentModel(array $comment): ?Comment
@@ -69,10 +78,10 @@ class CommentRepository extends Repository
         );
     }
 
-    private function getCommentsModel(array $commentData): ?Comment
+    private function getCommentsModel(array $comments): array
     {
-        if($commentData === false) return null;
+        if($comments === false) return null;
 
-        return array_map(fn($comment) => $this->getCommentModel($comment), $commentData);
+        return array_map(fn($comment) => $this->getCommentModel($comment), $comments);
     }
 }

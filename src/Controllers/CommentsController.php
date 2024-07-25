@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use ApplicationServices\CommentApplicationService;
+use App\ApplicationServices\CommentApplicationService;
 use Framework\Request;
 use Framework\Response;
 
@@ -31,11 +31,11 @@ class CommentsController
         return new Response($res);
     }
 
-    public function update(Request $request, int $thread_id, int $id): Response
+    public function update(Request $request, int $id): Response
     {
         $params = $request->getPostParams();
 
-        $res = (new CommentApplicationService)->updateComment($params);
+        $res = (new CommentApplicationService)->updateComment($params, $id);
 
         return new Response($res);
     }

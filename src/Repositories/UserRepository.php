@@ -25,6 +25,18 @@ class UserRepository extends Repository
         return $this->getUserModel($user);
     }
 
+    public function list(array $userIds): ?array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM Users where id IN (:userIds)');
+        $stmt->execute(['userIds' => implode(',', $userIds)]);
+
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if($users === false) return null;
+
+        return (array) array_map(fn($user) => $this->getUserModel($user), $users);
+    }
+
     public function create(User $user): ?User
     {
         $stmt = $this->db->prepare(

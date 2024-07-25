@@ -1,6 +1,6 @@
 <?php
 
-namespace ApplicationServices;
+namespace App\ApplicationServices;
 
 use App\Domain\Models\Comment;
 use App\Repositories\CommentRepository;
@@ -15,9 +15,24 @@ class CommentApplicationService
     {
         $comments = (new CommentRepository)->list($threadId);
 
-        return (array) array_map(function ($comment) {
-            $user = (new UserRepository)->findById($comment->getUserId());
-            $this->getCommentArray($comment, $user);
+        if($comments === null) return $this->failResponse(404, "Comments not found.");
+
+        $userIds = array_reduce($comments, function ($carry, $comment) {
+            $carry[] = $comment->getUserId();
+            return $carry;
+        });
+
+        $userIds = array_unique($userIds);
+
+        $users = (new UserRepository)->list($userIds);
+
+        if($comments === null) return $this->failResponse(404, "Users who commented not found.");
+
+        return (array) array_map(function ($comment) use ($users) {
+            $user = array_filter($users, function ($user) use ($comment) {
+                return $comment->getUserId() === $user->getId();
+            });
+            return $this->getCommentArray($comment, $user[0]);
         }, $comments);
     }
 
@@ -38,15 +53,21 @@ class CommentApplicationService
         return $this->successResponse(200, "Successfully commented!");
     }
 
-    public function updateComment(array $commentData): array
+    public function updateComment(array $commentData, int $id): array
     {
-        return $this->failResponse(400, "Comment udpate failed!");
+        $isSuccess = (new CommentRepository)->update($commentData, $id);
+
+        if(!$isSuccess) return $this->failResponse(400, "Comment update failed!");
+
+        return $this->successResponse(200, "Comment udpated!");
     }
 
-    public function deleteComment($commentId): array
+    public function deleteComment(int $id): array
     {
-        return $this->failResponse(400, "Comment delete failed!");
+        $isSuccess = (new CommentRepository)->delete($id);
+
+        if(!$isSuccess) return $this->failResponse(400, "Comment delete failed!");
+
+        return $this->successResponse(200, "Comment deleted!");
     }
-
-
 }
