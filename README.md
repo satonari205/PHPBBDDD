@@ -1,4 +1,14 @@
-This PHPBBDDD project is created by its author to learn about DDD.
+## Reference
+
+Repository
+https://github.com/BaseMax/PHPTaskDDD
+https://github.com/BaseMax/ForumPlatformDDD
+
+Books
+https://amzn.asia/d/0alE4jpd
+
+articles
+https://zenn.dev/yamachan0625/books/ddd-hands-on
 
 
 ## API Routes
