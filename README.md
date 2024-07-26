@@ -1,7 +1,9 @@
 ## Reference
 
 Repository
+
 https://github.com/BaseMax/PHPTaskDDD
+
 https://github.com/BaseMax/ForumPlatformDDD
 
 Books
@@ -9,6 +11,9 @@ https://amzn.asia/d/0alE4jpd
 
 articles
 https://zenn.dev/yamachan0625/books/ddd-hands-on
+
+baddy
+https://chatgpt.com/
 
 
 ## API Routes
