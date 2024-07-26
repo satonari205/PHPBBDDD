@@ -14,7 +14,7 @@ CREATE TABLE Threads (
     body TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Comments (
@@ -25,22 +25,22 @@ CREATE TABLE Comments (
     upvotes INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(id),
-    FOREIGN KEY (thread_id) REFERENCES Threads(id)
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (thread_id) REFERENCES Threads(id) ON DELETE CASCADE
 );
 
 -- Users テーブルにデータを挿入
 INSERT INTO Users (name, email, password) VALUES
-('User1', 'user1@example.com', 'password1'),
-('User2', 'user2@example.com', 'password2'),
-('User3', 'user3@example.com', 'password3'),
-('User4', 'user4@example.com', 'password4'),
-('User5', 'user5@example.com', 'password5'),
-('User6', 'user6@example.com', 'password6'),
-('User7', 'user7@example.com', 'password7'),
-('User8', 'user8@example.com', 'password8'),
-('User9', 'user9@example.com', 'password9'),
-('User10', 'user10@example.com', 'password10');
+('User1', 'user1@example.com', 'P@ssword1'),
+('User2', 'user2@example.com', 'P@ssword2'),
+('User3', 'user3@example.com', 'P@ssword3'),
+('User4', 'user4@example.com', 'P@ssword4'),
+('User5', 'user5@example.com', 'P@ssword5'),
+('User6', 'user6@example.com', 'P@ssword6'),
+('User7', 'user7@example.com', 'P@ssword7'),
+('User8', 'user8@example.com', 'P@ssword8'),
+('User9', 'user9@example.com', 'P@ssword9'),
+('User10', 'user10@example.com', 'P@ssword10');
 
 -- Threads テーブルにデータを挿入
 INSERT INTO Threads (user_id, title, body) VALUES

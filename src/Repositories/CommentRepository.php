@@ -63,7 +63,7 @@ class CommentRepository extends Repository
         return $stmt->execute(['id' => $id]);
     }
 
-    private function getCommentModel(array $comment): ?Comment
+    private function getCommentModel(array|bool $comment): ?Comment
     {
         if($comment === false) return null;
 

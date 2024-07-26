@@ -2,7 +2,7 @@
 
 namespace App\ApplicationServices;
 
-use App\Domain\Models\Comment;
+use App\Domain\DomainServices\CommentDomainService;
 use App\Repositories\CommentRepository;
 use App\Repositories\UserRepository;
 use App\Traits\ResponseTrait;
@@ -14,7 +14,6 @@ class CommentApplicationService
     public function getComments(int $threadId): array
     {
         $comments = (new CommentRepository)->list($threadId);
-
         if($comments === null) return $this->failResponse(404, "Comments not found.");
 
         $userIds = array_reduce($comments, function ($carry, $comment) {
@@ -22,11 +21,8 @@ class CommentApplicationService
             return $carry;
         });
 
-        $userIds = array_unique($userIds);
-
-        $users = (new UserRepository)->list($userIds);
-
-        if($comments === null) return $this->failResponse(404, "Users who commented not found.");
+        $users = (new UserRepository)->list(array_unique($userIds));
+        if($users === null) return $this->failResponse(404, "Users who commented not found.");
 
         return (array) array_map(function ($comment) use ($users) {
             $user = array_filter($users, function ($user) use ($comment) {
@@ -47,7 +43,6 @@ class CommentApplicationService
     public function createComment(array $commentData): array
     {
         $isSuccess = (new CommentRepository)->create($commentData);
-
         if(!$isSuccess) return $this->failResponse(400, "Comment failed!");
 
         return $this->successResponse(200, "Successfully commented!");
@@ -55,8 +50,10 @@ class CommentApplicationService
 
     public function updateComment(array $commentData, int $id): array
     {
-        $isSuccess = (new CommentRepository)->update($commentData, $id);
+        $isExists = (new CommentDomainService)->exists($id);
+        if($isExists) return $this->failResponse(400, "Comment not found.");
 
+        $isSuccess = (new CommentRepository)->update($commentData, $id);
         if(!$isSuccess) return $this->failResponse(400, "Comment update failed!");
 
         return $this->successResponse(200, "Comment udpated!");
@@ -64,8 +61,10 @@ class CommentApplicationService
 
     public function deleteComment(int $id): array
     {
-        $isSuccess = (new CommentRepository)->delete($id);
+        $isExists = (new CommentDomainService)->exists($id);
+        if($isExists) return $this->failResponse(400, "Comment not found.");
 
+        $isSuccess = (new CommentRepository)->delete($id);
         if(!$isSuccess) return $this->failResponse(400, "Comment delete failed!");
 
         return $this->successResponse(200, "Comment deleted!");

@@ -24,16 +24,12 @@ class User
         string $updated_at = null,
         ?int $id = null,
     ) {
-        try {
-            $this->setName(new UserName($name))
-                ->setEmail(new Email($email))
-                ->setPassword(new Password($password))
-                ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
-                ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()))
-                ->setId((int)$id);
-        } catch (InvalidArgumentException $e) {
-            return $e->getMessage();
-        }
+        $this->setName($name)
+            ->setEmail($email)
+            ->setPassword($password)
+            ->setCreatedAt($created_at ?? date('Y-m-d H:i:s', time()))
+            ->setUpdatedAt($updated_at ?? date('Y-m-d H:i:s', time()))
+            ->setId((int)$id);
     }
 
     public function setId(?int $id): self
@@ -47,9 +43,9 @@ class User
         return $this->id;
     }
 
-    public function setName(UserName $name): self
+    public function setName(string $name): self
     {
-        $this->name = $name;
+        $this->name = new UserName($name);
         return $this;
     }
 
@@ -58,9 +54,9 @@ class User
         return $this->name->getValue();
     }
 
-    public function setEmail(Email $email): self
+    public function setEmail(string $email): self
     {
-        $this->email = $email;
+        $this->email = new Email($email);
         return $this;
     }
 
@@ -69,9 +65,9 @@ class User
         return $this->email->getValue();
     }
 
-    public function setPassword(Password $password): self
+    public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->password = new Password($password);
         return $this;
     }
 
