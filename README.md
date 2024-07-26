@@ -1,5 +1,6 @@
 This PHPBBDDD project is created by its author to learn about DDD.
 
+
 ## API Routes
 
 ### Authentication
@@ -25,15 +26,11 @@ This PHPBBDDD project is created by its author to learn about DDD.
 
 ### Comments
 
-- GET api/thread/{thread_id}/comment/{id}
-- GET api/thread/{thread_id}/comments
-- POST api/thread/{thread_id}/comment
-- PATCH api/thread/{thread_id}/comment/{id}
-- DELETE api/thread/{thread_id}/comment/{id}
-
-### Search
-
-- GET api/search?q={query}
+- GET api/threads/{thread_id}/comments
+- GET api/comments/{id}
+- POST api/comments
+- PATCH api/comments/{id}
+- DELETE api/comments/{id}
 
 
 ## DatabaseSchema
@@ -56,7 +53,7 @@ This PHPBBDDD project is created by its author to learn about DDD.
 - `created_at`: timestamp
 - `updated_at`: timestamp
 
-### Replies
+### Comments
 
 - `id`: int (primary key)
 - `user_id`: int (foreign key to Users table)
