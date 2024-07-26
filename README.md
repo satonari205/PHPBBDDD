@@ -28,16 +28,16 @@ https://chatgpt.com/
 
 - GET api/user -> indentify with token
 - GET api/users
-- PUT api/user/{id}
-- DELETE api/user/{id}
+- PUT api/users/{id}
+- DELETE api/users/{id}
 
 ### Treads
 
-- GET api/thread/{id}
+- GET api/threads/{id}
 - GET api/threads
-- POST api/thread
-- PATCH api/thread/{id}
-- DELETE api/thread/{id}
+- POST api/threads
+- PATCH api/threads/{id}
+- DELETE api/threads/{id}
 
 ### Comments
 
